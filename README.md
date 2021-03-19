@@ -36,6 +36,14 @@ Note that some of actors are separated by responsibility for clarity, but this p
 
 ![Workflow Diagram Flow Chart](./diagram-workflow.svg)
 
+Notes:
+* Steps `1` through `6` in the diagram represent basic functionality in the SMART App Launch workflow.
+* Steps `7` and `8` represent basic FHIR functionality (getting patient information), which should be available in any FHIR implementation.
+* Steps `9` and `10` use standard FHIR functionality around the [ImagingStudy](http://hl7.org/fhir/imagingstudy.html) resource.
+* In Step `11`, the client is requesting DICOM data via WADO, using the token received during SMART App Launch.
+* In Steps `12` and `13`, the DICOM server is performing token introspection to validate the patient context against the request.
+* In Step `14`, DICOM data is returned to the client.
+
 ## API Calls
 
 ### App obtains an access token 
