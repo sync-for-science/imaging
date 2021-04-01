@@ -66,7 +66,7 @@ Now app has an access token that it can use for clinical + imaging APIs
     GET https://imaging-api.example.org/ImagingStudy?patient=123[&_lastUpdated=gt2021-04-17T04:00:00]
     Authorization: Bearer access-token-value-unguessable
 
-The Imaging FHIR server makes an access control decision informed by the EHR's Token Introspection API:
+If the Imaging FHIR server is distinct from the Clinical FHIR server, it makes an access control decision informed by the EHR's Token Introspection API:
 
 ```
    POST https://introspection.internal.example.org/introspect
@@ -84,7 +84,7 @@ The Imaging FHIR server MAY looks up additional information about this Patient I
 
 If the Imaging FHIR server needs to fetch data from sources that will take some time (e.g., issuing a DICOM C-FIND query under the hood), it MAY respond with a `503` status and a `Retry-After` header indicating how many seconds the app should wait before re-trying its query.
 
-If the Imaging FHIR server has data available (e.g., having called DICOM C-FIND or issued a QIDO-RS query under the hood), it responds with a FHIR Bundle of ImagingStudy resources, filtering by `Meta.lastUpdated` or `ImagingStudy.started` if client has supplied one of these search parameters. Each resource in the Bundle should populate the following fields at least:
+If Imaging data is already available (e.g., URLs point to the DICOM server, data has already been cached, etc.), it responds with a FHIR Bundle of ImagingStudy resources, filtering by `Meta.lastUpdated` or `ImagingStudy.started` if client has supplied one of these search parameters. Each resource in the Bundle should populate at least the following elements:
 
 ```
   {
@@ -117,8 +117,7 @@ The app can construct a series of requests from the $wado-rs URL by appending `/
 
 ### WADO endpoint responds with instance data
 
-As above, the server validates the access token via the Token Introspection API, ensuring that the token
-
+As above, the server validates the access token via the Token Introspection API, ensuring that the token:
 * is active
 * matches the patient ID for the requested study
 * includes scopes for `patient/ImagingStudy.read` or `patient/*.read` access
