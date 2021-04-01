@@ -2,18 +2,19 @@
 
 ## Actors, Roles, and Responsibilities
 
-* Authorization Endpoint
-  * Provide SMART authorization services
-* Token Introspection Endpoint
-  * Support SMART on FHIR token introspection
-* Clinical FHIR Server (EHR)
-  * Primary clinical information store, including Patient records, etc.
-* Imaging FHIR Server
-  * FHIR store either containing ImagingStudy records or having the ability to fetch / generate them
-* DICOM Server
-  * Imaging data store supporting (at a minimum) WADO
-* Client Application
-  * Client software supporting SMART App Launch
+* SMART on FHIR EHR
+  * Authorization Endpoint
+    * Provide SMART authorization services
+  * Token Introspection Endpoint
+    * Support SMART on FHIR token introspection
+  * Clinical FHIR Server (EHR)
+    * Primary clinical information store, including Patient records, etc.
+* (New!) SMART on FHIR Imaging System
+  * ImagingStudy FHIR Endpoint
+    * FHIR store either containing ImagingStudy records or having the ability to fetch / generate them
+  * DICOM WADO Endpoint
+    * Imaging data store supporting (at a minimum) WADO access to fetch a study by UID
+* (New!) Imaging Client Application
 
 Note that some of actors are separated by responsibility for clarity, but this project makes no assumptions about implementation.  For example, FHIR Imaging records may be stored in the Clinical FHIR Server, the DICOM server endpoint may be a proxy that implements the necessary WADO interface, etc..
 
