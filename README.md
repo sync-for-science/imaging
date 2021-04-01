@@ -74,7 +74,7 @@ If the Imaging FHIR server is distinct from the Clinical FHIR server, it makes a
 ```
 
 The Imaging FHIR server makes sure that 
-* the Patient ID from `ImagingStudy/:pid` matches the patient ID value returned in the introspection response
+* the Patient ID from `ImagingStudy?patient={}` matches the patient ID value returned in the introspection response
 * the access token is `active`
 * the access token includes `patient/ImagingStudy.read` or `patient/*.read` scopes
 
