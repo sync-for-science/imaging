@@ -106,7 +106,7 @@ If Imaging data is already available (e.g., URLs point to the DICOM server, data
   }
 ```
 
-### App requests instance data from wado-rsi
+### App requests instance data from wado-rs
 
 The app can construct a series of requests from the $wado-rs URL by appending `/studies/<Example Study UID>`:
 
