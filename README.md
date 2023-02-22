@@ -87,7 +87,7 @@ Now app has an access token that it can use for clinical + imaging APIs
 
 ### App requests imaging studies for patient
 
-    GET https://imaging-api.example.org/ImagingStudy?patient=123[&_lastUpdated=gt2021-04-17T04:00:00]
+    GET https://imaging-api.example.org/ImagingStudy?patient=123&_include=ImagingStudy.endpoint[&_lastUpdated=gt2021-04-17T04:00:00]
     Authorization: Bearer access-token-value-unguessable
 
 If the Imaging FHIR server is distinct from the Clinical FHIR server, it makes an access control decision informed by the EHR's Token Introspection API:
