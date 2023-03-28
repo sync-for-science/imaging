@@ -135,9 +135,19 @@ The app can construct a series of requests from the $wado-rs URL by appending `/
 
 ```
    GET https://imaging-api.example.org/Patient/123/$wado-rs/studies/example-study-uid
-   Accept: multipart/related; type=application/dicom
-   Authorize: Bearer access-token-value-unguessable
+   Accept: multipart/related; type=application/dicom; transfer-syntax=*
+   Authorization: Bearer access-token-value-unguessable
 ```
+
+At a minimum the server SHALL support retrieving a full study when the client requests 
+
+    multipart/related; type=application/dicom; transfer-syntax=*
+    
+This minimum subset is designed to ensure that even a static server can participate in hosting images. However, additional app features become possible with more capable servers. Servers MAY support additional WADO-RS functionality and are encouraged to support:
+
+* series-level retrieval
+* instance-level retrieval
+* thumbnail generation
 
 ### WADO endpoint responds with instance data
 
