@@ -28,6 +28,12 @@ Note that some of actors are separated by responsibility for clarity, but this p
 * EHR authorization screen includes support for `patient/*.read` (or `patient/ImagingStudy.read`)
 * User agrees to share imaging data with App, during the SMART App "Standalone Launch" flow
 
+## Scaling Considerations
+
+* Passing every "Get Studies for Patient" query through to an underlying PACS might overload these systems. The ImagingStudy FHIR Endpoint can avoid this with approaches like:
+  * Caching FHIR ImagingStudies (e.g., with some heuristic for invalidation)
+  * Establishing change feeds from the underlying PACS to improve invalidation accuracy
+  
 ## Workflow
 
 * App authorized via SMART on FHIR
