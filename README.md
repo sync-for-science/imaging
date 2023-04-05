@@ -53,6 +53,8 @@ sequenceDiagram
   C->>CFS: GET Patient/123
   CFS-->>C: Resource: Patient/123
   C->>IFS: GET ImagingStudy/?patient=Patient/123
+  IFS->>AS: Introspect Token: abc
+  AS-->>IFS: Token valid for Patient/123
   IFS-->>C: Bundle of ImagingStudy resources
   C->>D: GET studies/example-study-uid
   D->>AS: Introspect Token: abc
