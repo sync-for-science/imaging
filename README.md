@@ -9,10 +9,11 @@
     * Support SMART on FHIR token introspection
   * Clinical FHIR Server (EHR)
     * Primary clinical information store, including Patient records, etc.
-* (New!) SMART on FHIR Imaging System
+* (New!) SMART on FHIR Imaging Subsystem
   * ImagingStudy FHIR Endpoint
     * FHIR store either containing ImagingStudy records or having the ability to fetch / generate them
-  * DICOM WADO Endpoint
+    * Can be hosted within the EHR's FHIR endpoint or separately
+  * DICOM WADO Endpoint(s)
     * Imaging data store supporting (at a minimum) WADO access to fetch a study by UID
 * (New!) Imaging Client Application
 
@@ -132,8 +133,6 @@ If Imaging data is already available (e.g., URLs point to the DICOM server, data
     "modality": [<Modalities in Study>],
     "endpoint": {"reference": "#e"} // May be "contained" or external
                  // connectionType = dicom-wado-rs
-                 // This URL should follow a convention of:
-                 // [Imaging FHIR Server Base URL]/Patient/123/$wado-rs
   }
 ```
 
