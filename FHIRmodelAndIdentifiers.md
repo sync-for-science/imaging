@@ -8,11 +8,11 @@ We will first introduce the most relevant identifiers. Indicate when these ident
 
 The main identifiers used are:
 
-* MRN: the Medical Record Number of the Patient.
-* AccessionNumber: the RIS defined identifier for the imaging order.
-* StudyInstanceUID: The DICOM identifier of an ImagingStudy.
-* SeriesInstanceUID: The DICOM identifier of a series within an ImagingStudy.
-* SOPInstanceUID: The DICOM identifier of a study within serie.
+* `MRN`: the Medical Record Number of the Patient.
+* `AccessionNumber`: the RIS defined identifier for the imaging order.
+* `StudyInstanceUID`: The DICOM identifier of an ImagingStudy.
+* `SeriesInstanceUID`: The DICOM identifier of a series within an ImagingStudy.
+* `SOPInstanceUID`: The DICOM identifier of a study within serie.
 
 ## Imaging workflow in a hospital
 
@@ -38,7 +38,7 @@ sequenceDiagram
 
 ```
 
-As can be seen in the diagram, the RIS is responsible for the creation of the AccessionNumber.
+As can be seen in the diagram, the RIS is responsible for the creation of the `AccessionNumber`.
 
 ### Acquire the image
 
@@ -142,7 +142,7 @@ This model is a FHIR reflection of the data available in DICOM as can be retriev
 
 The ImagingStudy resource represents the DICOM study. I holds the ids for the series and instances. These id's can be used to retrieve imaging data though WADO.
 
-It refers to a Patient resource to hold the Patient information stored in the DICOM study and to a ServiceRequest resource to hold the order related data (AccessionNumber).
+It refers to a Patient resource to hold the Patient information stored in the DICOM study and to a ServiceRequest resource to hold the order related data (`AccessionNumber`).
 
 The ImagingStudy resource also refers to one or more EndPoint resources that hold the WADO url the application can use to retrieve the DICOM information. Note that for different studies, different endpoints can be used.
 
@@ -173,9 +173,11 @@ Note this is my interpretation on how this could work.
 
 In order to achieve loose coupling between the EHR model and the FHIR Imaging System, no full URL references are assumed. When the URL is known, they should be included. When not known, an identifier reference is used.
 
-The ServiceRequest holds the AccessionNumber as a identifier. When first created this is not available and is added as soon as the RIS provides it.
+The ServiceRequest holds the `AccessionNumber` as a identifier. When first created this is not available and is added as soon as the RIS provides it.
 
-Both the DiagnosticReport and ServiceRequest refer to the Patient. The Patient holds its MRN as an identifier.
+The DiagnosticReport refers to the ImagingStudy using the `study` field, the suggestion is to add a identifier using the `StudyInstanceUID` reference to the ImagingStudy.
+
+Both the DiagnosticReport and ServiceRequest refer to the Patient. The Patient holds its `MRN` as an identifier.
 
 ## Evaluation
 
