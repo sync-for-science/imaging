@@ -89,6 +89,7 @@ The figure below indicates the DICOM model.
 classDiagram
     class study {
         AccessionNumber
+        StudyInstanceUID
         Patient demographics and MRN
     }
     class series {
