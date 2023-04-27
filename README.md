@@ -9,7 +9,7 @@
     * Support SMART on FHIR token introspection
   * Clinical FHIR Server (EHR)
     * Primary clinical information store, including Patient records, etc.
-* (New!) SMART on FHIR Imaging Subsystem
+* (New!) SMART on FHIR Imaging
   * ImagingStudy FHIR Endpoint
     * FHIR store either containing ImagingStudy records or having the ability to fetch / generate them
     * Can be hosted within the EHR's FHIR endpoint or separately
@@ -37,6 +37,7 @@ Note that some of actors are separated by responsibility for clarity, but this p
   
 ## Workflow
 
+* Discovery: App learns Imaging FHIR endpoint associated with EHR Clinical FHIR endpoint
 * App authorized via SMART on FHIR
 * Optional: App queries EHR clinical FHIR server for data
 * App queries imaging FHIR server for `ImagingStudy` resource
@@ -78,6 +79,43 @@ Notes:
 * In Step `14`, DICOM data is returned to the client.
 
 ## API Calls
+
+### Discovery of Imaging FHIR Endpoint
+
+EHRs supporting in-band discovery SHALL advertise support by including
+`"smart-imaging-access"` in the capabilities array of their FHIR server's
+`.well-known/smart-configuration` file.
+
+EHRs supporting in-band discovery SHALL include an `associated_endpoints` array
+if their Imaging Endpoint is hosted at a location distinct from the main FHIR
+endpoint on which discovery is being performed.
+
+When the `"smart-imaging-access"` capability is present, the EHR's "Imaging FHIR endpoints" are defined as:
+
+1. All `associated_endpoints` whose `capabilities` include `"smart-imaging-access"`
+2. The EHR's primary FHIR endpoint, if (1) is empty set
+
+#### Example discovery document
+
+Consider a FHIR server with base URL `https://ehr.example.org/fhir`, whose Imaging Endpoint is hosted at `https://imaging.example.org/fhir`.
+
+The discovery document at `https://ehr.example.org/fhir/.well-known/smart-configuration` would include:
+
+```js
+{
+  "capabilities": [
+    "smart-imaging-access",
+    // <other capabilities snipped>
+  ],
+  "associated_endpoints": [
+    {
+      "url": "https://imaging.example.org/fhir",
+      "capabilities": ["smart-imaging-access"]
+    }
+  ]
+  // <other properties snipped>
+}
+```
 
 ### App obtains an access token 
 
