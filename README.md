@@ -39,7 +39,7 @@ Note that some of actors are separated by responsibility for clarity, but this p
 
 * App authorized via SMART on FHIR
 * Optional: App queries EHR clinical FHIR server for data
-* App queries EHR imaging FHIR server for `ImagingStudy` resource
+* App queries imaging FHIR server for `ImagingStudy` resource
 * App following links from ImagingStudy to fetch DICOM data
 
 ```mermaid
