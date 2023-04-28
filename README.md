@@ -29,12 +29,12 @@ Note that some of actors are separated by responsibility for clarity, but this p
 * EHR authorization screen includes support for `patient/*.read` (or `patient/ImagingStudy.read`)
 * User agrees to share imaging data with App, during the SMART App "Standalone Launch" flow
 
-For background on imaging infrastructure and identifiers, see [[./infrastructure-and-identifiers-primer.md]].
+For background on imaging infrastructure and identifiers, see [/infrastructure-and-identifiers-primer.md](/infrastructure-and-identifiers-primer.md).
 
 ## Scaling Considerations
 
-* Passing every "Get Studies for Patient" query through to an underlying PACS might overload these systems. The ImagingStudy FHIR Endpoint can avoid this with approaches like:
-  * Caching FHIR ImagingStudies (e.g., with some heuristic for invalidation)
+* Passing every "Get Studies for Patient" query through to an underlying PACS might overload these systems. The Imaging FHIR endpoint can avoid this with approaches like:
+  * Caching FHIR ImagingStudy Resources (e.g., with some heuristic for invalidation)
   * Establishing change feeds from the underlying PACS to improve invalidation accuracy
   
 ## Workflow
@@ -84,12 +84,12 @@ Notes:
 
 ### Discovery of Imaging FHIR Endpoint
 
-EHRs supporting in-band discovery SHALL advertise support by including
+EHRs supporting in-band discovery **SHALL** advertise support by including
 `"smart-imaging-access"` in the capabilities array of their FHIR server's
 `.well-known/smart-configuration` file.
 
-EHRs supporting in-band discovery SHALL include an `associated_endpoints` array
-if their Imaging Endpoint is hosted at a location distinct from the main FHIR
+EHRs supporting in-band discovery **SHALL** include an `associated_endpoints` array
+if their Imaging FHIR Endpoint is hosted at a location distinct from the main FHIR
 endpoint on which discovery is being performed.
 
 When the `"smart-imaging-access"` capability is present, the EHR's "Imaging FHIR endpoints" are defined as:
@@ -99,7 +99,7 @@ When the `"smart-imaging-access"` capability is present, the EHR's "Imaging FHIR
 
 #### Example discovery document
 
-Consider a FHIR server with base URL `https://ehr.example.org/fhir`, whose Imaging Endpoint is hosted at `https://imaging.example.org/fhir`.
+Consider a FHIR server with base URL `https://ehr.example.org/fhir`, whose Imaging FHIR Endpoint is hosted at `https://imaging.example.org/fhir`.
 
 The discovery document at `https://ehr.example.org/fhir/.well-known/smart-configuration` would include:
 
@@ -186,7 +186,7 @@ The app can construct a series of requests from the $wado-rs URL by appending `/
    Authorization: Bearer access-token-value-unguessable
 ```
 
-At a minimum the server SHALL support retrieving a full study when the client requests 
+At a minimum the server **SHALL** support retrieving a full study when the client requests 
 
     multipart/related; type=application/dicom; transfer-syntax=*
     
