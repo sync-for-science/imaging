@@ -176,6 +176,25 @@ If Imaging data is already available (e.g., URLs point to the DICOM server, data
   }
 ```
 
+The Endpoint SHALL include:
+
+* `address` a WADO base URL from which queries about the study can be made
+* `connectionType` indicates DICOM Web WADO-RS with
+```json
+{
+  "system": "http://terminology.hl7.org/CodeSystem/endpoint-connection-type",
+  "code": "dicom-wado-rs",
+}
+```
+
+* `extension` to indicate that the WADO endpoint works with the SMART Imaging API, using the same access tokens as the ImagingStudy endpoint (see [this definition]([url](https://hl7.org/fhir/async-bulk.html#:~:text=Indicates%20whether%20downloading%20the%20generated%20files%20requires%20the%20same%20authorization%20mechanism)))
+```json
+{
+  "url": "http://hl7.org/fhir/smart-app-launch/StructureDefinition/requires-access-token",
+  "valueBoolean": true
+}
+```
+
 ### App requests instance data from wado-rs
 
 The app can construct a series of requests from the $wado-rs URL by appending `/studies/<Example Study UID>`:
