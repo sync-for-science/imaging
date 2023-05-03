@@ -29,7 +29,7 @@ Note that some of actors are separated by responsibility for clarity, but this p
 * EHR authorization screen includes support for `patient/*.read` (or `patient/ImagingStudy.read`)
 * User agrees to share imaging data with App, during the SMART App "Standalone Launch" flow
 
-For background on imaging infrastructure and identifiers, see [/infrastructure-and-identifiers-primer.md](/infrastructure-and-identifiers-primer.md).
+For background on imaging infrastructure and identifiers, see [./infrastructure-and-identifiers-primer.md](./infrastructure-and-identifiers-primer.md).
 
 ## Scaling Considerations
 
