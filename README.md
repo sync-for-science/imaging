@@ -136,22 +136,38 @@ Now app has an access token that it can use for clinical + imaging APIs
 
 ### App requests imaging studies for patient
 
-    GET https://imaging-api.example.org/ImagingStudy?patient=123&_include=ImagingStudy.endpoint[&_lastUpdated=gt2021-04-17T04:00:00]
-    Authorization: Bearer access-token-value-unguessable
-
-If the Imaging FHIR server is distinct from the Clinical FHIR server, it makes an access control decision informed by the EHR's Token Introspection API:
+(Newlines added for clarity only.)
 
 ```
-   POST https://introspection.internal.example.org/introspect
-   token=access-token-value-unguessable
+GET https://imaging-api.example.org/ImagingStudy?
+  patient=Patient/123&
+  _include=ImagingStudy:endpoint&
+  _lastUpdated=gt2023-04-17T04:00:00
+
+Authorization: Bearer access-token-value-unguessable
+```
+
+The Imaging FHIR server SHALL support returning Endpoints for each `ImagingStudy` (whether contained or external), enabling the query parameter `_include=ImagingStudy:endpoint`.
+
+The Imaging FHIR server SHALL support the following search parameters combinations:
+
+* `patient=` specifying a patient ID
+* `patient=&_lastUpdated=gt...` specifying a patient ID and a "last-updated after" timestamp
+* `patient=&identifier=` specifying a patient ID and a DICOM Study Instance UID (`urn:oid:...`)
+
+If the Imaging FHIR server is distinct from the Clinical FHIR server, it needs to make an access control decision informed by the EHR. One option is to use the EHR's Token Introspection API:
+
+```
+POST https://introspection.internal.example.org/introspect
+token=access-token-value-unguessable
 ```
 
 The Imaging FHIR server makes sure that 
 * the Patient ID from `ImagingStudy?patient={}` matches the patient ID value returned in the introspection response
 * the access token is `active`
-* the access token includes `patient/ImagingStudy.read` or `patient/*.read` scopes
+* the access token includes `patient/ImagingStudy.read`, `patient/*.read`, or other scopes appropriate for the request
 
-The Imaging FHIR server MAY looks up additional information about this Patient ID as needed from the EHR (e.g., leveraging Backend Services API access to `GET https://clinical-api.example.org/Patient/123`.) This returns a list of patient Identifiers that the Imaging FHIR server may need to cross-map with its own data.
+The Imaging FHIR server MAY request additional information as needed from the EHR (e.g., leveraging Backend Services API access to `GET https://ehr.example.org/Patient/123`.) This can help by providing a list of patient Identifiers or other details that the Imaging FHIR server may need to cross-map with its own data.
 
 ### Imaging FHIR server responds with data or a "wait up!" status
 
