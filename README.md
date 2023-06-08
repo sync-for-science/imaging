@@ -140,7 +140,7 @@ Now app has an access token that it can use for clinical + imaging APIs
 
 ```
 GET https://imaging-api.example.org/ImagingStudy?
-  patient=Patient/123&
+  patient=123&
   _include=ImagingStudy:endpoint&
   _lastUpdated=gt2023-04-17T04:00:00
 
