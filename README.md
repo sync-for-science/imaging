@@ -151,9 +151,9 @@ The Imaging FHIR server SHALL support returning Endpoints for each `ImagingStudy
 
 The Imaging FHIR server SHALL support the following search parameters combinations:
 
-* `patient=` specifying a patient ID
-* `patient=&_lastUpdated=gt...` specifying a patient ID and a "last-updated after" timestamp
-* `patient=&identifier=` specifying a patient ID and a DICOM Study Instance UID (`urn:oid:...`)
+* `patient=123` specifying a patient ID
+* `patient=123&_lastUpdated=gt2023-01-30` specifying a patient ID and a "last-updated after" timestamp
+* `patient=123&identifier=urn:oid:1.2.3` specifying a patient ID and a DICOM Study Instance UID (`urn:oid:...`)
 
 If the Imaging FHIR server is distinct from the Clinical FHIR server, it needs to make an access control decision informed by the EHR. One option is to use the EHR's Token Introspection API:
 
@@ -178,18 +178,54 @@ If Imaging data is already available (e.g., URLs point to the DICOM server, data
 ```
   {
     "resourceType": "ImagingStudy",
-    "id": "",
+    "id": "123",
     "identifier":{
         "system":"urn:dicom:uid",
-	"value":"<Example Study UID>"
+	"value":"urn:oid:1.2.3"
     },
     "status": "available",
-    "patient": "Patient/123",
-    "started": <StudyDate + StudyTime + Timezone Offset>,
-    "modality": [<Modalities in Study>],
+    "patient": {"reference": "Patient/123"},
+    "started": "2023-02-24T14:02:49Z",
+    "modality": [{
+      "coding" : [{
+        "system" : "http://dicom.nema.org/resources/ontology/DCM",
+        "code" : "CT"
+      }]
+    }],
     "endpoint": {"reference": "#e"} // May be "contained" or external
-                 // connectionType = dicom-wado-rs
+    "contained": [{
+      "resourceType": "Endpoint",
+      "id": "e",
+      "address": "https://example.org/path/to/wado-endpoint",
+      "connectionType": {
+        "system": "http://terminology.hl7.org/CodeSystem/endpoint-connection-type",
+        "code": "dicom-wado-rs"
+      },
+      "extension": [{
+        "url": "http://hl7.org/fhir/smart-app-launch/StructureDefinition/requires-access-token",
+        "valueBoolean": true
+      }]
+    }]
   }
+```
+
+Whether "contained" or external, the `Endpoint` SHALL include:
+
+* `address` a WADO base URL from which queries about the study can be made
+* `connectionType` indicating DICOM Web WADO-RS with
+```json
+{
+  "system": "http://terminology.hl7.org/CodeSystem/endpoint-connection-type",
+  "code": "dicom-wado-rs",
+}
+```
+
+* `extension` to indicate that the WADO endpoint works with the SMART Imaging API, using the same access tokens as this ImagingStudy endpoint. (see [this definition]([url](https://hl7.org/fhir/async-bulk.html#:~:text=Indicates%20whether%20downloading%20the%20generated%20files%20requires%20the%20same%20authorization%20mechanism)))
+```json
+{
+  "url": "http://hl7.org/fhir/smart-app-launch/StructureDefinition/requires-access-token",
+  "valueBoolean": true
+}
 ```
 
 ### App requests instance data from wado-rs
@@ -206,11 +242,13 @@ At a minimum the server **SHALL** support retrieving a full study when the clien
 
     multipart/related; type=application/dicom; transfer-syntax=*
     
-This minimum subset is designed to ensure that even a static server can participate in hosting images. However, additional app features become possible with more capable servers. Servers MAY support additional WADO-RS functionality and are encouraged to support:
+This minimum subset is designed to ensure that even a static server can participate in hosting images. However, additional app features become possible with more capable servers. Servers SHOULD support additional WADO-RS functionality and are encouraged to support:
+SHOULD level requirements make sense here and can provide useful capabilities for clients when available
 
 * series-level retrieval
 * instance-level retrieval
-* thumbnail generation
+* rendering / preview / thumbnail generation
+* re-encoding based on negotiated transfer-syntax
 
 ### WADO endpoint responds with instance data
 
