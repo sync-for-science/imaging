@@ -1,4 +1,4 @@
-# Basic APIs for Imaging Access
+# Imaging Access
 
 ## Actors, Roles, and Responsibilities
 
