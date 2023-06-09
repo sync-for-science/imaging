@@ -82,20 +82,12 @@ Notes:
 
 ## API Calls
 
-### Discovery of Imaging FHIR Endpoint
+### Discovery of Imaging FHIR Endpoints
 
-EHRs supporting in-band discovery **SHALL** advertise support by including
-`"smart-imaging-access"` in the capabilities array of their FHIR server's
-`.well-known/smart-configuration` file.
+EHRs supporting in-band discovery **SHALL** advertise their Imaging FHIR Endpoints by including `"smart-imaging-access"` in the appropriate locations(s) of their `.well-known/smart-configuration`:
 
-EHRs supporting in-band discovery **SHALL** include an `associated_endpoints` array
-if their Imaging FHIR Endpoint is hosted at a location distinct from the main FHIR
-endpoint on which discovery is being performed.
-
-When the `"smart-imaging-access"` capability is present, the EHR's "Imaging FHIR endpoints" are defined as:
-
-1. All `associated_endpoints` whose `capabilities` include `"smart-imaging-access"`
-2. The EHR's primary FHIR endpoint, if (1) is empty set
+* top-level `capabilities` if this FHIR endpoint directly supports Imaging Access
+* nested `associated_endpoints[].capabilities` if associated FHIR endpoints support Imaging Access
 
 #### Example discovery document
 
@@ -106,7 +98,6 @@ The discovery document at `https://ehr.example.org/fhir/.well-known/smart-config
 ```js
 {
   "capabilities": [
-    "smart-imaging-access",
     // <other capabilities snipped>
   ],
   "associated_endpoints": [
