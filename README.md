@@ -25,7 +25,7 @@ Note that some of actors are separated by responsibility for clarity, but this p
 * EHR supports SMART on FHIR token introspection
 * App knows the EHR's imaging endpoint either through:
   * out-of-band config, or
-  * EHR's `.well-known/smart-configuration` includes an `imaging` FHIR base URL
+  * EHR's `.well-known/smart-configuration` includes an `smart-imaging-access` URL
 * EHR authorization screen includes support for `patient/*.read` (or `patient/ImagingStudy.read`)
 * User agrees to share imaging data with App, during the SMART App "Standalone Launch" flow
 
