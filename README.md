@@ -211,7 +211,7 @@ Whether "contained" or external, the `Endpoint` SHALL include:
 }
 ```
 
-* `extension` to indicate that the WADO endpoint works with the SMART Imaging API, using the same access tokens as this ImagingStudy endpoint. (see [this definition]([url](https://hl7.org/fhir/async-bulk.html#:~:text=Indicates%20whether%20downloading%20the%20generated%20files%20requires%20the%20same%20authorization%20mechanism)))
+* `extension` to indicate that the WADO endpoint works with the SMART Imaging API, using the same access tokens as this ImagingStudy endpoint. (See [this definition](https://hl7.org/fhir/async-bulk.html#:~:text=Indicates%20whether%20downloading%20the%20generated%20files%20requires%20the%20same%20authorization%20mechanism).)
 ```json
 {
   "url": "http://hl7.org/fhir/smart-app-launch/StructureDefinition/requires-access-token",
