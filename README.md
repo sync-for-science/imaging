@@ -233,8 +233,7 @@ At a minimum the server **SHALL** support retrieving a full study when the clien
 
     multipart/related; type=application/dicom; transfer-syntax=*
     
-This minimum subset is designed to ensure that even a static server can participate in hosting images. However, additional app features become possible with more capable servers. Servers SHOULD support additional WADO-RS functionality and are encouraged to support:
-SHOULD level requirements make sense here and can provide useful capabilities for clients when available
+This minimum subset is designed to ensure that even a static server can participate in hosting images. However, additional app features become possible with more capable servers. Servers SHOULD support additional WADO-RS functionality:
 
 * series-level retrieval
 * instance-level retrieval
