@@ -164,9 +164,37 @@ The Imaging FHIR server MAY request additional information as needed from the EH
 
 If the Imaging FHIR server needs to fetch data from sources that will take some time (e.g., issuing a DICOM C-FIND query under the hood), it MAY respond with a `503` status and a `Retry-After` header indicating how many seconds the app should wait before re-trying its query.
 
-If Imaging data is already available (e.g., URLs point to the DICOM server, data has already been cached, etc.), it responds with a FHIR Bundle of ImagingStudy resources, filtering by `Meta.lastUpdated` or `ImagingStudy.started` if client has supplied one of these search parameters. Each resource in the Bundle should populate at least the following elements:
+If Imaging data is already available (e.g., URLs point to the DICOM server, data has already been cached, etc.), it responds with a FHIR Bundle of ImagingStudy resources, filtering by `Meta.lastUpdated` or `ImagingStudy.started` if client has supplied one of these search parameters.
 
-```
+Each `ImagingStudy` in the Bundle SHALL populate the following elements:
+
+* `resourceType`
+* `id`
+* `identifier` with `system` of `urn:dicom:uid` and `value` of `urn:oid:...`
+* `status`
+* `patient`
+* `modality`
+* `endpoint`
+* `numberOfSeries`
+* `numberOfInstances`
+
+
+Each `ImagingStudy` in the Bundle SHOULD populate the following elements:
+
+* `series`
+  * `uid`
+  * `number`
+  * `modality`
+  * `numberOfInstances`
+  * `instance`
+    * `uid`
+    * `number`
+    * `sopClass`
+
+
+Here is an example `ImagingStudy` resource:
+
+```json
   {
     "resourceType": "ImagingStudy",
     "id": "123",
@@ -175,7 +203,7 @@ If Imaging data is already available (e.g., URLs point to the DICOM server, data
 	"value":"urn:oid:1.2.3"
     },
     "status": "available",
-    "patient": {"reference": "Patient/123"},
+    "patient": {"reference": "https://ehr.example.org/Patient/123"},
     "started": "2023-02-24T14:02:49Z",
     "modality": [{
       "coding" : [{
