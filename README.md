@@ -13,11 +13,11 @@
   * ImagingStudy FHIR Endpoint
     * FHIR store either containing ImagingStudy records or having the ability to fetch / generate them
     * Can be hosted within the EHR's FHIR endpoint or separately
-  * DICOM WADO Endpoint(s)
-    * Imaging data store supporting (at a minimum) WADO access to fetch a study by UID
+  * DICOM WADO-RS Endpoint(s)
+    * Imaging data store supporting (at a minimum) WADO-RS access to fetch a study by UID
 * (New!) Imaging Client Application
 
-Note that some of actors are separated by responsibility for clarity, but this project makes no assumptions about implementation.  For example, FHIR Imaging records may be stored in the Clinical FHIR Server, the DICOM server endpoint may be a proxy that implements the necessary WADO interface, etc..
+Note that some of actors are separated by responsibility for clarity, but this project makes no assumptions about implementation.  For example, FHIR Imaging records may be stored in the Clinical FHIR Server, the DICOM server endpoint may be a proxy that implements the necessary WADO-RS interface, etc..
 
 ## Assumptions and Pre-conditions
 
@@ -76,7 +76,7 @@ Notes:
 * Steps `1` through `6` in the diagram represent basic functionality in the SMART App Launch workflow.
 * Steps `7` and `8` represent basic FHIR functionality (getting patient information), which should be available in any FHIR implementation.
 * Steps `9` and `10` use standard FHIR functionality around the [ImagingStudy](http://hl7.org/fhir/imagingstudy.html) resource.
-* In Step `11`, the client is requesting DICOM data via WADO, using the token received during SMART App Launch.
+* In Step `11`, the client is requesting DICOM data via WADO-RS, using the token received during SMART App Launch.
 * In Steps `12` and `13`, the DICOM server is performing token introspection to validate the patient context against the request.
 * In Step `14`, DICOM data is returned to the client.
 
@@ -214,7 +214,7 @@ Here is an example `ImagingStudy` resource:
     "contained": [{
       "resourceType": "Endpoint",
       "id": "e",
-      "address": "https://example.org/path/to/wado-endpoint",
+      "address": "https://example.org/path/to/wado-rs-endpoint",
       "connectionType": {
         "system": "http://terminology.hl7.org/CodeSystem/endpoint-connection-type",
         "code": "dicom-wado-rs"
@@ -229,7 +229,7 @@ Here is an example `ImagingStudy` resource:
 
 Whether "contained" or external, the `Endpoint` SHALL include:
 
-* `address` a WADO base URL from which queries about the study can be made
+* `address` a WADO-RS base URL from which queries about the study can be made
 * `connectionType` indicating DICOM Web WADO-RS with
 ```json
 {
@@ -238,7 +238,7 @@ Whether "contained" or external, the `Endpoint` SHALL include:
 }
 ```
 
-* `extension` to indicate that the WADO endpoint works with the SMART Imaging API, using the same access tokens as this ImagingStudy endpoint. (See [this definition](https://hl7.org/fhir/async-bulk.html#:~:text=Indicates%20whether%20downloading%20the%20generated%20files%20requires%20the%20same%20authorization%20mechanism).)
+* `extension` to indicate that the WADO-RS endpoint works with the SMART Imaging API, using the same access tokens as this ImagingStudy endpoint. (See [this definition](https://hl7.org/fhir/async-bulk.html#:~:text=Indicates%20whether%20downloading%20the%20generated%20files%20requires%20the%20same%20authorization%20mechanism).)
 ```json
 {
   "url": "http://hl7.org/fhir/smart-app-launch/StructureDefinition/requires-access-token",
@@ -248,10 +248,10 @@ Whether "contained" or external, the `Endpoint` SHALL include:
 
 ### App requests instance data from wado-rs
 
-The app can construct a series of requests from the $wado-rs URL by appending `/studies/<Example Study UID>`:
+The app can construct a series of requests from the WADO-RS endpoint URL by appending `/studies/<Example Study UID>`. For the example above, this would look like:
 
 ```
-   GET https://imaging-api.example.org/Patient/123/$wado-rs/studies/example-study-uid
+   GET https://example.org/path/to/wado-rs-endpoint/studies/example-study-uid
    Accept: multipart/related; type=application/dicom; transfer-syntax=*
    Authorization: Bearer access-token-value-unguessable
 ```
@@ -262,12 +262,14 @@ At a minimum the server **SHALL** support retrieving a full study when the clien
     
 This minimum subset is designed to ensure that even a static server can participate in hosting images. However, additional app features become possible with more capable servers. Servers SHOULD support additional WADO-RS functionality:
 
-* series-level retrieval
-* instance-level retrieval
-* rendering / preview / thumbnail generation
-* re-encoding based on negotiated transfer-syntax
+* series-level retrieval (e.g., `GET /studies/{}/series/{}`)
+* instance-level retrieval (e.g., `GET /studies/{}/series/{}/instances/{}`)
+* frame-level retrieval (e.g., `GET /studies/{}/series/{}/instances/{}/frames/{}`)
+* rendered study, series, or instance (e.g., `GET /studies/{}/series/{}/instances/{}/rendered`)
+* metadata for study, series, or instance (e.g., `GET /studies/{}/metadata`)
+* re-encoding binary payloads based on negotiated transfer-syntax
 
-### WADO endpoint responds with instance data
+### WADO-RS endpoint responds with instance data
 
 As above, the server validates the access token via the Token Introspection API, ensuring that the token:
 * is active
