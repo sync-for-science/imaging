@@ -175,12 +175,11 @@ Each `ImagingStudy` in the Bundle SHALL populate the following elements:
 * `patient`
 * `modality`
 * `endpoint`
-* `numberOfSeries`
-* `numberOfInstances`
 
 
 Each `ImagingStudy` in the Bundle SHOULD populate the following elements:
-
+* `numberOfSeries`
+* `numberOfInstances`
 * `series`
   * `uid`
   * `number`
