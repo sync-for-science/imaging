@@ -246,7 +246,7 @@ Whether "contained" or external, the `Endpoint` SHALL include:
 }
 ```
 
-### App requests instance data from wado-rs
+### App requests instance data from WADO-RS
 
 The app can construct a series of requests from the WADO-RS endpoint URL by appending `/studies/<Example Study UID>`. For the example above, this would look like:
 
