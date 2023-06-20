@@ -193,7 +193,7 @@ Each `ImagingStudy` in the Bundle SHOULD populate the following elements:
 
 Here is an example `ImagingStudy` resource:
 
-```json
+```js
   {
     "resourceType": "ImagingStudy",
     "id": "123",
@@ -210,7 +210,7 @@ Here is an example `ImagingStudy` resource:
         "code" : "CT"
       }]
     }],
-    "endpoint": {"reference": "#e"} // May be "contained" or external
+    "endpoint": {"reference": "#e"}, // May be "contained" or external
     "contained": [{
       "resourceType": "Endpoint",
       "id": "e",
