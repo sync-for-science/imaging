@@ -210,7 +210,7 @@ Here is an example `ImagingStudy` resource:
         "code" : "CT"
       }]
     }],
-    "endpoint": {"reference": "#e"}, // May be "contained" or external
+    "endpoint": [{"reference": "#e"}], // May be "contained" or external
     "contained": [{
       "resourceType": "Endpoint",
       "id": "e",
