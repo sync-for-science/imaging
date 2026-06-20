@@ -123,7 +123,16 @@ App redirects to `/authorize` and receives an authorization code. Then App calls
    }
 ```
 
-Now app has an access token that it can use for clinical + imaging APIs
+Now app has an access token that it can use for clinical + imaging APIs.
+
+Note: This profile assumes that the SMART access token obtained from the EHR
+authorization flow is used when calling associated Imaging FHIR endpoints and
+linked WADO-RS endpoints. Imaging services can validate this token through
+introspection or other trust arrangements with the EHR authorization server, and
+then constrain access according to the patient context and granted scopes.
+Future work may define optional token-exchange metadata for deployments that
+require imaging-scoped tokens, but token exchange is not required for this
+profile.
 
 ### App requests imaging studies for patient
 
